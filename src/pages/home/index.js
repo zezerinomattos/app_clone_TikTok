@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import React, {useRef, useState} from 'react';
+import { View, Text, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 
 // MY IMPORTS
 import styles from './styles';
@@ -8,9 +8,15 @@ import { FeedItem } from '../../components/FeedItem';
 //Lista de post fixa para teste
 import { feedItems } from '../../utils/ListVideos';
 
+const { height: heightScreen } = Dimensions.get('screen');
+
 export default function Home(){
-
-
+    const [showItem, setShowItem] = useState(feedItems[0]);
+    const onViewRef = useRef(({ viewableItems }) => {
+        if(viewableItems && viewableItems.length > 0){
+            setShowItem(feedItems[viewableItems[0].index])
+        }
+    });
 
     return(
         <View style={styles.container}>
@@ -27,7 +33,20 @@ export default function Home(){
 
             <FlatList
                 data={feedItems}
-                renderItem={({ item }) => <FeedItem data={item}/>}
+                renderItem={({ item }) => <FeedItem data={item} currentVisibleItem={showItem}/>}
+                onViewableItemsChanged={onViewRef.current}
+                snapToAlignment='center'
+                snapToInterval={heightScreen}
+                scrollEventThrottle={200}
+                decelerationRate={'fast'}
+                viewabilityConfig={{
+                    waitForInteraction: false,
+                    viewAreaCoveragePercentThreshold: 100
+                    /*
+                        100 significa que um item deve estar TOTALMENTE VISIVEL na tela para contar como visivel
+                     */
+                }}
+                showsVerticalScrollIndicator={false}
             />
 
         </View>
