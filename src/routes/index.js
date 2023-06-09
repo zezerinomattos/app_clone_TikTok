@@ -7,6 +7,8 @@ import Inbox from '../pages/inbox';
 import New from '../pages/new';
 import Profile from '../pages/profile';
 
+import { ButtonNew } from '../components/ButtonNew';
+
 const Tab = createBottomTabNavigator();
 
 export function Routes(){
@@ -53,11 +55,10 @@ export function Routes(){
                 name='New' 
                 component={New}
                 options={{
-                    tabBarIcon: ({ focused, size, color }) => {
-                        if(focused){
-                            return <Ionicons name='newspaper' size={size} color={color} />
-                        }
-                        return <Ionicons name='newspaper-outline' size={size} color={color} />
+                    tabBarIcon: ({ size }) => {
+                        // CRIEI O COMPONENTE PARA NEW PARA QUE FIQUE IGUAL AO APP DE INSPIRAÇÃO E ORIGINAL.
+                        return <ButtonNew size={size}/>
+                        
                     }
                 }}
             />
